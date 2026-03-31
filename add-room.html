@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: header('Add Room - Smart HMS')}"></head>
+
+<body>
+
+    <div th:replace="~{layout :: sidebar('rooms')}"></div>
+
+    <div class="main-wrapper">
+        <div th:replace="~{layout :: navbar}"></div>
+
+        <div class="content-padding">
+            <div class="mb-5">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb bg-light px-3 py-2 rounded-3 small fw-700">
+                        <li class="breadcrumb-item"><a th:href="@{/admin/rooms}"
+                                class="text-decoration-none text-muted">Rooms</a></li>
+                        <li class="breadcrumb-item active text-primary" aria-current="page">Add New Room</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-800 mb-2">Create New Room</h2>
+                <p class="text-muted fw-600 mb-0">Expand hostel capacity by initializing a new accommodation unit.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="card border-0 shadow-sm p-4 rounded-4">
+                        <form th:action="@{/admin/rooms/save}" method="post">
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                            class="bi bi-door-closed me-1"></i> Room Identification</label>
+                                    <input type="text" name="roomNumber"
+                                        class="form-control rounded-3 border-light bg-light p-3 fw-600" required
+                                        placeholder="e.g. 101 or B-204">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                            class="bi bi-people me-1"></i> Bed Capacity</label>
+                                    <input type="number" name="capacity"
+                                        class="form-control rounded-3 border-light bg-light p-3 fw-600" required min="1"
+                                        max="10" value="4">
+                                </div>
+                            </div>
+
+                            <div class="mb-5">
+                                <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                        class="bi bi-toggle-on me-1"></i> Initial Resource Status</label>
+                                <select name="status" class="form-select rounded-3 border-light bg-light p-3 fw-600">
+                                    <option value="AVAILABLE">Active & Available</option>
+                                    <option value="MAINTENANCE">Under Maintenance / Reserved</option>
+                                </select>
+                            </div>
+
+                            <div
+                                class="alert bg-primary-subtle border-primary-subtle text-primary rounded-3 d-flex align-items-center gap-3 mb-4">
+                                <i class="bi bi-info-circle-fill fs-4"></i>
+                                <div class="small fw-600">
+                                    Creating a room will immediately make it visible in the allotment system. Ensure all
+                                    facility checks are complete.
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 mt-5">
+                                <button type="submit"
+                                    class="btn btn-primary px-5 py-3 fw-800 rounded-3 shadow-sm d-flex align-items-center gap-2">
+                                    <i class="bi bi-plus-square"></i> <span>Initialize Room</span>
+                                </button>
+                                <a th:href="@{/admin/rooms}"
+                                    class="btn btn-light px-5 py-3 fw-800 rounded-3 border">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

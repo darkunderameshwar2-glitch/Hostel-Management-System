@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: header('Room Management - Smart HMS')}"></head>
+
+<body>
+
+    <div th:replace="~{layout :: sidebar('rooms')}"></div>
+
+    <div class="main-wrapper">
+        <div th:replace="~{layout :: navbar}"></div>
+
+        <div class="content-padding">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h3 class="fw-800 mb-0">Room Management</h3>
+                <div class="d-flex gap-2">
+                    <a th:href="@{/admin/rooms/allot}"
+                        class="btn btn-light text-primary fw-700 border d-flex align-items-center gap-2">
+                        <i class="bi bi-person-check"></i> Allot Room
+                    </a>
+                    <a th:href="@{/admin/rooms/add}" class="btn btn-primary d-flex align-items-center gap-2">
+                        <i class="bi bi-plus-circle"></i> Add New Room
+                    </a>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-xl-4 col-md-6" th:each="room : ${rooms}">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="icon-shape bg-primary-subtle text-primary rounded-3 p-3">
+                                        <i class="bi bi-door-closed fs-4"></i>
+                                    </div>
+                                    <h5 class="fw-800 mb-0">Room <span th:text="${room.roomNumber}">101</span></h5>
+                                </div>
+                                <span
+                                    th:class="'badge ' + (${room.status == 'AVAILABLE' ? 'bg-success-subtle text-success' : (room.status == 'FULL' ? 'bg-danger-subtle text-danger' : 'bg-warning-subtle text-warning')}) + ' border px-3 py-2'"
+                                    th:text="${room.status}">AVAILABLE</span>
+                            </div>
+
+                            <div class="mb-4">
+                                <div class="d-flex justify-content-between small fw-700 mb-2">
+                                    <span class="text-muted">Occupancy</span>
+                                    <span th:text="${room.currentOccupancy} + ' / ' + ${room.capacity}">1 / 4</span>
+                                </div>
+                                <div class="progress"
+                                    style="height: 8px; border-radius: 10px; background-color: #f1f5f9;">
+                                    <div class="progress-bar" role="progressbar"
+                                        th:style="'width: ' + (${room.currentOccupancy * 100 / room.capacity}) + '%'"
+                                        th:classappend="${room.status == 'FULL' ? 'bg-danger' : 'bg-primary'}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="occupants-list bg-light rounded-4 p-3 mb-4">
+                                <p class="extra-small text-muted fw-800 text-uppercase mb-2"
+                                    style="letter-spacing: 0.5px;">Current Occupants</p>
+                                <div class="d-flex flex-column gap-2">
+                                    <div th:each="student : ${room.students}"
+                                        class="d-flex align-items-center gap-2 small fw-600">
+                                        <i class="bi bi-person-circle text-muted"></i>
+                                        <span th:text="${student.name}">Student Name</span>
+                                    </div>
+                                    <div th:if="${#lists.isEmpty(room.students)}" class="text-muted small italic py-1">
+                                        <i class="bi bi-info-circle me-1"></i> No occupants yet
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="d-flex justify-content-end gap-2">
+                                <button class="btn btn-sm btn-light border text-primary px-3"><i
+                                        class="bi bi-pencil-square pe-1"></i> Edit</button>
+                                <button class="btn btn-sm btn-light border text-danger px-3"><i
+                                        class="bi bi-trash3"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:if="${#lists.isEmpty(rooms)}" class="col-12 py-5 text-center bg-white rounded-4 shadow-sm">
+                    <i class="bi bi-door-open fs-1 text-muted d-block mb-3"></i>
+                    <h5 class="text-muted fw-700">No rooms available in the system.</h5>
+                    <p class="text-muted small">Start by adding a new room to the hostel.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

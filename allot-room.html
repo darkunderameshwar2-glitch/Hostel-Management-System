@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: header('Allot Room - Smart HMS')}"></head>
+
+<body>
+
+    <div th:replace="~{layout :: sidebar('rooms')}"></div>
+
+    <div class="main-wrapper">
+        <div th:replace="~{layout :: navbar}"></div>
+
+        <div class="content-padding">
+            <div class="mb-5">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb bg-light px-3 py-2 rounded-3 small fw-700">
+                        <li class="breadcrumb-item"><a th:href="@{/admin/rooms}"
+                                class="text-decoration-none text-muted">Rooms</a></li>
+                        <li class="breadcrumb-item active text-primary" aria-current="page">Allot Room</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-800 mb-2">Room Allotment Utility</h2>
+                <p class="text-muted fw-600 mb-0">Link unassigned students to available accommodation units.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-8">
+                    <div class="card border-0 shadow-sm p-4 rounded-4">
+                        <form th:action="@{/admin/rooms/allot}" method="post">
+                            <div class="mb-4">
+                                <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                        class="bi bi-person-check me-1"></i> Select Student (Unassigned)</label>
+                                <select name="studentId" class="form-select rounded-3 border-light bg-light p-3 fw-600"
+                                    required>
+                                    <option value="" disabled selected>Search or choose a student...</option>
+                                    <option th:each="student : ${unassignedStudents}" th:value="${student.id}"
+                                        th:text="${student.name} + ' (' + ${student.studentId} + ')'"></option>
+                                </select>
+                                <div th:if="${#lists.isEmpty(unassignedStudents)}"
+                                    class="alert bg-danger-subtle border-danger-subtle text-danger rounded-3 p-2 mt-3 extra-small fw-700">
+                                    <i class="bi bi-info-circle me-1"></i> All registered students are currently
+                                    assigned to rooms.
+                                </div>
+                            </div>
+
+                            <div class="mb-5">
+                                <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                        class="bi bi-door-open me-1"></i> Target Accommodation</label>
+                                <select name="roomId" class="form-select rounded-3 border-light bg-light p-3 fw-600"
+                                    required>
+                                    <option value="" disabled selected>Choose a room with vacancies...</option>
+                                    <option th:each="room : ${rooms}"
+                                        th:if="${room.status != 'FULL' && room.status != 'MAINTENANCE'}"
+                                        th:value="${room.id}"
+                                        th:text="'Room ' + ${room.roomNumber} + ' (Available Slots: ' + (${room.capacity - room.currentOccupancy}) + ')'">
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div
+                                class="alert bg-warning-subtle border-warning-subtle text-dark rounded-3 d-flex align-items-center gap-3 mb-4">
+                                <i class="bi bi-shield-exclamation text-warning fs-3"></i>
+                                <div class="small fw-600">
+                                    <span class="fw-800">Note:</span> Allotment updates the room's current occupancy
+                                    count in real-time. This action is recorded in the system audit logs.
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 mt-5">
+                                <button type="submit"
+                                    class="btn btn-primary px-5 py-3 fw-800 rounded-3 shadow-sm d-flex align-items-center gap-2"
+                                    th:disabled="${#lists.isEmpty(unassignedStudents)}">
+                                    <i class="bi bi-check2-circle"></i> <span>Complete Allotment</span>
+                                </button>
+                                <a th:href="@{/admin/rooms}"
+                                    class="btn btn-light px-5 py-3 fw-800 rounded-3 border">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

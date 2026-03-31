@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="~{layout :: header('Register Visitor - Smart HMS')}"></head>
+
+<body>
+
+    <div th:replace="~{layout :: sidebar('visitors')}"></div>
+
+    <div class="main-wrapper">
+        <div th:replace="~{layout :: navbar}"></div>
+
+        <div class="content-padding">
+            <div class="mb-5">
+                <nav aria-label="breadcrumb" class="mb-3">
+                    <ol class="breadcrumb bg-light px-3 py-2 rounded-3 small fw-700">
+                        <li class="breadcrumb-item"><a th:href="@{/warden/visitors}"
+                                class="text-decoration-none text-muted">Visitors</a></li>
+                        <li class="breadcrumb-item active text-primary" aria-current="page">Register Entry</li>
+                    </ol>
+                </nav>
+                <h2 class="fw-800 mb-2">Visitor Registration</h2>
+                <p class="text-muted fw-600 mb-0">Record details for guests and temporary campus visitors.</p>
+            </div>
+
+            <div class="row">
+                <div class="col-xl-9">
+                    <div class="card border-0 shadow-sm p-4 rounded-4">
+                        <form th:action="@{/warden/visitors/save}" method="post">
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                            class="bi bi-person me-1"></i> Visitor Full Name</label>
+                                    <input type="text" name="name"
+                                        class="form-control rounded-3 border-light bg-light p-3 fw-600" required
+                                        placeholder="Enter full name">
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                            class="bi bi-info-circle me-1"></i> Purpose of Visit</label>
+                                    <select name="purpose"
+                                        class="form-select rounded-3 border-light bg-light p-3 fw-600" required>
+                                        <option value="" disabled selected>Select purpose...</option>
+                                        <option value="Personal">Personal / Family</option>
+                                        <option value="Maintenance">Maintenance / Delivery</option>
+                                        <option value="Official">Official Work</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                        class="bi bi-mortarboard me-1"></i> Student being Visited</label>
+                                <select name="studentToVisit.id"
+                                    class="form-select rounded-3 border-light bg-light p-3 fw-600" required>
+                                    <option value="" disabled selected>Search or choose a student...</option>
+                                    <option th:each="s : ${students}" th:value="${s.id}"
+                                        th:text="${s.name} + ' (' + ${s.studentId} + ')'"></option>
+                                </select>
+                            </div>
+
+                            <div class="row g-4 mb-4">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                            class="bi bi-shield-check me-1"></i> Phone Verification</label>
+                                    <div class="input-group">
+                                        <input type="text"
+                                            class="form-control rounded-start-3 border-light bg-light p-3 fw-600"
+                                            placeholder="Visitor's phone">
+                                        <button class="btn btn-primary px-3 fw-800" type="button">SEND OTP</button>
+                                    </div>
+                                    <div class="extra-small text-muted mt-2 fw-600 italic">Simulation: Real-time
+                                        verification via SMS gate.</div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-800 text-dark small text-uppercase"><i
+                                            class="bi bi-camera me-1"></i> Identity Capture</label>
+                                    <div class="border border-dashed border-2 rounded-3 bg-light d-flex align-items-center justify-content-center text-muted fw-700 pointer-hand"
+                                        style="height: 58px; cursor: pointer;">
+                                        <i class="bi bi-camera-fill me-2 fs-5 text-primary"></i> Click to Capture Photo
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div
+                                class="alert bg-warning-subtle border-warning-subtle text-dark rounded-3 d-flex align-items-center gap-3 mb-4">
+                                <i class="bi bi-shield-exclamation text-warning fs-3"></i>
+                                <div class="small fw-600">
+                                    <span class="fw-800">Security Requirement:</span> Cross-check visitor ID proof
+                                    before finalizing entry logs. Entry timestamp will be recorded on submission.
+                                </div>
+                            </div>
+
+                            <div class="d-flex gap-3 mt-5">
+                                <button type="submit"
+                                    class="btn btn-primary px-5 py-3 fw-800 rounded-3 shadow-sm d-flex align-items-center gap-2">
+                                    <i class="bi bi-check2-all"></i> <span>Complete Registration</span>
+                                </button>
+                                <a th:href="@{/warden/visitors}"
+                                    class="btn btn-light px-5 py-3 fw-800 rounded-3 border">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>
